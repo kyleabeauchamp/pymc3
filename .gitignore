@@ -21,6 +21,3 @@ _build
 
 # Test artifacts
 mcmc.sqlite
-
-# Docker development
-notebooks/
