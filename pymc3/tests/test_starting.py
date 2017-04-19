@@ -2,8 +2,10 @@ from .checks import close_to
 import numpy as np
 from pymc3.tuning import starting
 from pymc3 import Model, Uniform, Normal, Beta, Binomial, find_MAP, Point
+from ..sampling import sample
 from .models import simple_model, non_normal, exponential_beta, simple_arbitrary_det
 from .helpers import select_by_precision
+from scipy.optimize import fmin_l_bfgs_b
 
 
 def test_accuracy_normal():
@@ -82,3 +84,14 @@ def test_find_MAP():
 
     close_to(map_est2['mu'], 0, tol)
     close_to(map_est2['sigma'], 1, tol)
+
+
+def test_map_floatX():
+    """Minimal scipy BFGS MAP, inspired by test_linear in test_distributions_timeseries.py."""
+    mu, sigma = 0, 1.
+    with Model() as model:
+        x = Normal("x", mu, sigma)
+    with model:
+        start = find_MAP(vars=[x], fmin=fmin_l_bfgs_b)  # So bfgs requires float64 dtypes
+        warmup = sample(200, start=start)
+        trace = sample(1000, start=warmup[-1])
