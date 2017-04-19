@@ -86,12 +86,12 @@ def test_find_MAP():
     close_to(map_est2['sigma'], 1, tol)
 
 
-def test_map_floatX():
-    """Minimal scipy BFGS MAP, inspired by test_linear in test_distributions_timeseries.py."""
+def test_map_bfgs():
+    """Minimal scipy BFGS MAP test, inspired by test_linear in test_distributions_timeseries.py."""
     mu, sigma = 0, 1.
     with Model() as model:
         x = Normal("x", mu, sigma)
     with model:
         start = find_MAP(vars=[x], fmin=fmin_l_bfgs_b)  # So bfgs requires float64 dtypes
-        warmup = sample(200, start=start)
-        trace = sample(1000, start=warmup[-1])
+        warmup = sample(5, start=start)
+        trace = sample(5, start=warmup[-1])
