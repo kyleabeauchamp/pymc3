@@ -23,7 +23,7 @@ command -v conda >/dev/null 2>&1 || {
 ENVNAME="testenv"
 PYTHON_VERSION=${PYTHON_VERSION:-3.6} # if no python specified, use 3.6
 
-printf "[global]\nfloatX = $FLOATX" > test
+printf "[global]\nfloatX = $FLOATX" > ~/.theanorc
 
 if [ -z ${GLOBAL} ]
 then
